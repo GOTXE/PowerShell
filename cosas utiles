@@ -1,3 +1,17 @@
 # Saber la versión instalada de PS
-
 Get-Host | Select-Object Version
+
+###########
+
+# COMPROBAR, HABILITAR Y DETENER SERVICIO WINRM
+# Comprobar estado de winrm
+Get-Service winrm
+
+# Iniciar servicio WinRM
+# Start-Service winrm
+
+# Establecer autenticacion en básica
+#winrm set winrm/config/client/auth '@{Basic="True"}'
+
+# Detener servicio WinRM
+# Stop-Service winrm
