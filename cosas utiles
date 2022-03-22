@@ -1,0 +1,3 @@
+# Saber la versión instalada de PS
+
+Get-Host | Select-Object Version
