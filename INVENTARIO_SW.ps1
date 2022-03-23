@@ -24,7 +24,7 @@ $computerSystem = Get-WmiObject Win32_ComputerSystem
 $nombreSistema = $computerSystem.name
 
 # Lugar donde se va a guardar la información, en $path tienes que añadir tu ruta donde guardar el archivo
-# $path = 'C:\Users\adflota10\Desktop\'
+# $path = 'C:\Users\nombre\Desktop\'
 $path = 'RUTA\'
 $export = $path+'TU_'+$nombreSistema+'_SW.txt'
 
