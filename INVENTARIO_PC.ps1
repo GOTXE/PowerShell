@@ -35,7 +35,7 @@ function Decode {
 
 $computerSystem = Get-WmiObject Win32_ComputerSystem
 $computerBIOS = Get-WmiObject Win32_BIOS
-$ccomputerOS = Get-WmiObject Win32_OperatingSystem
+$computerOS = Get-WmiObject Win32_OperatingSystem
 $computerCPU = Get-WmiObject Win32_Processor
 $computerHDD = Get-WmiObject Win32_LogicalDisk -Filter drivetype=3 # REVISAR
 $computerDiskDrive = Get-WMIObject win32_diskdrive
