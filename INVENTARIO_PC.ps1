@@ -8,8 +8,8 @@
 # EN CASO DE TENER VARIOS DISCOS DUROS NO SE CALCULA EL TAMAÑO DE DISCO (HDD_GB)        #
 #                                                                                       #
 #########################################################################################
-# PRIMERO INTRODUCIR LA RUTA DONDE SEGUARDARÁ EL ARCHIVO INVENTARIO.CSV                 #
-# EN LA VARIABLE $export TIENE QUE ESPECIFICAR LA RUTA                                  #
+# PRIMERO INTRODUCIR LA RUTA DONDE SE GUARDARÁ EL ARCHIVO INVENTARIO.CSV                #
+# EN LA VARIABLE $export                                                                #
 #########################################################################################
 # GUARDAR EL ARCHIVO INVENTARIO_PC.PS1 EN UN DIRECTORIO DONDE TENGAN ACCESO TODOS LOS   #
 # PC DE LOS QUE SE QUIERA HACER INVENTARIO.                                             # 
