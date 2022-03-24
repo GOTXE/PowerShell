@@ -10,7 +10,7 @@
 # EN LA VARIABLE $fileLog TIENES QUE ESPECIFICAR LA RUTA DONDE SE GUARDARÁ EL LOG       #
 #########################################################################################
 # ESTE SCRIPT GENERA UN NOMBRE DE ARCHIVO QUE EMPIEZA POR TU                            #
-# HAY QUE MODIFICAR A MANO LOS DC (DCXX) Y LOS TERMINALES DE ADMINISTRADOR (TUADMXX)    #
+#                                                                                       #
 #########################################################################################
 # DIEGO                                                                                 #   
 # Marzo, 2022                                                                           #  
