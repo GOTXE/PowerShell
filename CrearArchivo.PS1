@@ -2,7 +2,7 @@
 # Script estraido de https://adamtheautomator.com/powershell-check-if-file-exists/
 
 # Path al archivo
-$file = 'C:\Users\DIEGO\Desktop\texto.csv'
+$file = 'C:\Users\DIEGO\Desktop\texto.txt'
 
 # Si el archivo no existe lo crea
 if (-not(Test-Path -Path $file -PathType Leaf)) {
