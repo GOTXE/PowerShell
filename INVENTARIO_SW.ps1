@@ -22,25 +22,47 @@ $nombreSistema = $computerSystem.name
 
 # Lugar donde se va a guardar la información, en $path tienes que añadir tu ruta donde guardar el archivo
 # $path = 'C:\Users\nombre\Desktop\'
-$path = 'C:\Users\DIEGO\Desktop\'
+$path = 'PATH\'
 $nombreArchivo = 'TU_'+$nombreSistema+'_SW.txt'
 $export = $path+$nombreArchivo
-$pathLog = C:\Users\DIEGO\Desktop\log.txt
+$fileLog = 'PATH\log_inv_SW.txt'
 
-# Verifica si existe el archivo, si no existe lo crea con los datos generados
-if (-not(Test-Path -Path $export -PathType Leaf)) {
-    try {
-        # Recopilar información de instalación del equipo 
-        Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* |  Select-Object DisplayName, DisplayVersion, Publisher, InstallDate | Format-Table -AutoSize | Out-File $export  
-    }
+
+# Verifica si existe el archivo log, si no existe lo crea
+
+if (-not(Test-Path -Path $fileLog -PathType Leaf)) {
+    try { 
+        New-Item -Path $fileLog -ItemType File
+        $msglog = "Se genera el archivo LOG en  " + " - " + $fileLog + "`n"
+        (Get-Date).ToString() + " - " + $msglog >> $fileLog
+           }
     catch {
         throw $_.Exception.Message
     }
    }
-else {
-    Add-Content -Value "El archivo ya estaba creado" -Path $pathLog
-    
-}
+
+# Verifica si existe el archivo del equipo, si existe lo elimina para sustituirlo por uno nuevo, para reflejar los cambios que pueda haber
+
+if (Test-Path -Path $export -PathType Leaf) {
+    try { 
+        Remove-Item -Path $export
+
+        # Se registra en el log el borrado del archivo
+        $msglog = "Borrado Archivo configuracion SW PC: " + " - "+ $nombreArchivo
+        (Get-Date).ToString() + " - " + $msglog >> $fileLog
+
+           }
+    catch {
+        throw $_.Exception.Message
+    }
+   }
+
+# Recopilar información de instalación del equipo 
+Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* |  Select-Object DisplayName, DisplayVersion, Publisher, InstallDate | Format-Table -AutoSize | Out-File $export  
+
+# Añadir info al log
+$msglog = "Generado archivo configuracion SW PC: " + " - " + $nombreSistema
+(Get-Date).ToString() + " - " + $msglog >> $fileLog
 
 
 
