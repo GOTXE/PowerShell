@@ -8,19 +8,15 @@
 # EN CASO DE TENER VARIOS DISCOS DUROS NO SE CALCULA EL TAMAÑO DE DISCO (HDD_GB)        #
 #                                                                                       #
 #########################################################################################
-# DEBERÁ CREAR PRIMERO UN ARCHVO CSV EN EL PATH DONDE SE VA A GUARDAR EL ARCHIVO        #
-# YA QUE AL SER UN ARCHIVO CON -APPEND SI NO EXISTE EL ARCHIVO DA FALLO                 #
-#########################################################################################
-# EN LA VARIABLE $export TIENE QUE ESPECIFICAR EL PATH DONDE GUARDARÁ EL CSV            #
+# PRIMERO INTRODUCIR LA RUTA DONDE SEGUARDARÁ EL ARCHIVO INVENTARIO.CSV                 #
+# EN LA VARIABLE $export TIENE QUE ESPECIFICAR LA RUTA                                  #
 #########################################################################################
 # GUARDAR EL ARCHIVO INVENTARIO_PC.PS1 EN UN DIRECTORIO DONDE TENGAN ACCESO TODOS LOS   #
-# PC QUE DE LOS QUE SE QUIERA HACER INVENTARIO.                                         # 
+# PC DE LOS QUE SE QUIERA HACER INVENTARIO.                                             # 
 #########################################################################################
 
-#########################################################################################
 
-# Funcion para traducir ciertos valores
-
+# Funcion para traducir valores
 function Decode {
     If ($args[0] -is [System.Array]) {
         [System.Text.Encoding]::ASCII.GetString($args[0])
@@ -30,25 +26,43 @@ function Decode {
     }
 }
 
+# Introducir ruta y nombre donde guardar el archivo CSV
+$path = 'PATH\'
+$nombreArchivo = 'inventario.csv'
+
+# Path más archivo csv
+$export = $path + $nombreArchivo
+
+
+# Verifica si existe el archivo, si no existe lo crea
+if (-not(Test-Path -Path $export -PathType Leaf)) {
+     try {
+         $null = New-Item -ItemType File -Path $export -Force -ErrorAction Stop
+         Write-Host "The file [$export] has been created."
+     }
+     catch {
+         throw $_.Exception.Message
+     }
+    }
 
 # Recoger informacion del PC
 
 $computerSystem = Get-WmiObject Win32_ComputerSystem
 $computerBIOS = Get-WmiObject Win32_BIOS
-$computerOS = Get-WmiObject Win32_OperatingSystem
+$computerOS = Get-WmiObject Win32_OperatingSystem |select-object -expandproperty caption -First 1
 $computerCPU = Get-WmiObject Win32_Processor
-$computerHDD = Get-WmiObject Win32_LogicalDisk -Filter drivetype=3 # REVISAR
 $computerDiskDrive = Get-WMIObject win32_diskdrive
-$computerNET = Get-WmiObject win32_networkadapterconfiguration -Filter IPEnabled=TRUE | select macaddress
-$Monitor = gwmi WmiMonitorID -Namespace root\wmi
+$computerNET = Get-WmiObject win32_networkadapterconfiguration -Filter IPEnabled=TRUE | select-object -ExpandProperty macaddress -First 1
+$Monitor = Get-WmiObject WmiMonitorID -Namespace root\wmi
 
 
-# CREAR CSV con los datos extraidos
+# Crea CSV con los datos recogidos
 
 $csvObject = New-Object PSObject -property @{
 'Equipo' = $computerSystem.Name
 'Marca' = $computerSystem.Manufacturer
 'Modelo' = $computerSystem.Model
+'OS' = $computerOS
 'CPU' = $computerCPU.Name
 'RAM' = "{0:N2}" -f ($computerSystem.TotalPhysicalMemory/1GB)
 'HDD_GB' = '{0:d} GB' -f [int]($computerDiskDrive.Size/1GB)
@@ -63,12 +77,6 @@ $csvObject = New-Object PSObject -property @{
 
  }
 
-# Directorio de exportación de archivo
-# Escriba el PATH del archivo csv
+# Exporta campos al csv
 
-$export = 'PATH_AL_ARCHIVO\inventario.csv'
-
-# Exportar campos a csv
-# Al ser un archivo al que se añaden datos, previamente crear el archivo CSV en el directorio donde se va a guardar, si no dará fallo y no creará el archivo
-
-$csvObject | Select Equipo, Marca, Modelo, CPU, RAM, NumSerie, BIOS, Eth, HDD_GB, HDD_MARCA, HDD_SERIAL, Monitor_Marca, Monitor_Nombre, Monitor_Serial | Export-Csv $export -NoTypeInformation -Append
+$csvObject | Select-Object Equipo, Marca, Modelo, OS, CPU, RAM, NumSerie, BIOS, Eth, HDD_GB, HDD_MARCA, HDD_SERIAL, Monitor_Marca, Monitor_Nombre, Monitor_Serial | Export-Csv $export -NoTypeInformation -Append
