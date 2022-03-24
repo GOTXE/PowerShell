@@ -1,0 +1,70 @@
+# ARRAYS
+# Formas de definir un Array
+
+$arrayVacio = @()
+$numsEnteros1 = @(1,2,3,4,5)
+$numsEnteros2 = 1,2,3,4,5
+$consecutivos = 1..10 # array formado por 1,2,3,4,5,6,7,8,9,10
+$caracteres = "a","b","c"
+$multiTipo = @(1,2,3,"A","B")
+
+
+#Ejemplos
+$enteros = @(1,2,3,4)
+
+Write-Host "Array enteros: "$enteros
+Write-Host "Posicion 2 del array [1]: " $enteros[1]
+Write-Host "Posicion ultima del array [-1]: " $enteros[-1] 
+
+# Como saber cuantos elementos tiene un array
+# length
+
+Write-Host "Longitud del array" $enteros.Length
+
+
+# Añadir elementos a un array con +=
+
+$enteros += 555
+$enteros += 7, 29
+
+Write-Host "Añadir elementos al array:" $enteros
+
+
+# SUMA DE ARRAYS
+
+$a = @(1,2)
+$b = 3,4
+$c = $a+$b
+
+Write-Host "Suma de Arrays: " $c
+
+# COMANDO -JOIN
+
+$numeros = 1,2,3,4
+Write-Host "Uso de -join con -: " 
+$numeros -join '-'
+
+# -CONTAINS
+
+Write-Host "números contiene el 2?" 
+$numeros -contains 2
+
+# -NOTCONTAINS
+
+Write-Host "Números contiene el 9?"
+$numeros -notcontains 9
+
+
+# ARRAYLIST
+
+[System.Collections.ArrayList] $caps = "A", "B", "C","D", "E"
+
+Write-Host "Array con ArrayList: " $caps
+
+# Eliminar elemento C
+
+while ($caps -contains "C") {
+    $caps.Remove("C")
+}
+
+Write-Host "Eliminar elemento C del Array: " $caps
