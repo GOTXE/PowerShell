@@ -12,7 +12,7 @@
 # PC DE LOS QUE SE QUIERA HACER INVENTARIO.                                             # 
 #########################################################################################
 # ESTE SCRIPT GENERA UN NOMBRE DE ARCHIVO QUE EMPIEZA POR TU                            #
-# HAY QUE MODIFICAR A MANO LOS DC (DCXX) Y LOS TERMINALES DE ADMINISTRADOR (TUADMXX)    #
+# HAY QUE MODIFICAR A MANO LOS DC (DCXX) Y LOS TERMINALES DE ADMINISTRADOR (TADMXX)     #
 #########################################################################################
 
 
@@ -22,7 +22,7 @@ $nombreSistema = $computerSystem.name
 
 # Lugar donde se va a guardar la información, en $path tienes que añadir tu ruta donde guardar el archivo
 # $path = 'C:\Users\nombre\Desktop\'
-$path = 'C:\Users\DIEGO\Desktop\'
+$path = 'PATH\'
 $nombreArchivo = 'TU_'+$nombreSistema+'_SW.txt'
 $export = $path+$nombreArchivo
 $pathLog = C:\Users\DIEGO\Desktop\log.txt
