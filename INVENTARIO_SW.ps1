@@ -38,7 +38,7 @@ if (-not(Test-Path -Path $export -PathType Leaf)) {
     }
    }
 else {
-    Add-Content -Value "El archivo ya estaba creado" -Path $pathLog
+    Add-Content $pathLog "`nEl archivo ya estaba creado" 
     
 }
 

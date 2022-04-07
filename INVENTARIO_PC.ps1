@@ -80,3 +80,5 @@ $csvObject = New-Object PSObject -property @{
 # Exporta campos al csv
 
 $csvObject | Select-Object Equipo, Marca, Modelo, OS, CPU, RAM, NumSerie, BIOS, Eth, HDD_GB, HDD_MARCA, HDD_SERIAL, Monitor_Marca, Monitor_Nombre, Monitor_Serial | Export-Csv $export -NoTypeInformation -Append
+
+# Fin
