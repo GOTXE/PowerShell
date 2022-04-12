@@ -71,3 +71,27 @@ $resultado = [Math]::Round($resultado,2)
 Write-Host "Tu IMC es de $resultado, ajustado a dos decimales "
 
 # 8 - Pedir 2 numeros enteros. Mostrar n entre m da cociente c, y resto r.
+
+$n1 = Read-Host "Introduce un número"
+$n2 = Read-Host "Introduce otro número"
+
+$cociente = $n1/$n2
+
+$resto = $n1%$n2
+
+Write-Host "El cociente de $n1 entre $n2 es $cociente"
+Write-Host "El resto de la division de $n1 entre $n2 es $resto"
+
+
+# 9 - Pedir cantidad de dinero a invertir, interes anual y número de años. 
+#     Devolver resultado obtenido de la inversión
+
+[float]$aporteDinero = Read-Host "¿Cúanto vas a invertir?"
+[float]$interesAnual = Read-Host "¿Cuánto es el interés anual?"
+[float]$años = Read-Host "¿Cúantos años tendrás la inversión?"
+
+$interesGanado = $aporteDinero*($interesAnual/100)
+
+$capitalObtenido = $interesGanado*$años
+
+Write-Host "El capital final es $capitalObtenido"
