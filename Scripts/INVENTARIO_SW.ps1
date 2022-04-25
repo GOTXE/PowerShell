@@ -25,7 +25,7 @@ $nombreSistema = $computerSystem.name
 $path = 'PATH\'
 $nombreArchivo = 'TU_'+$nombreSistema+'_SW.txt'
 $export = $path+$nombreArchivo
-$pathLog = C:\Users\DIEGO\Desktop\log.txt
+$pathLog = C:\Users\xxxxx\Desktop\log.txt
 
 # Verifica si existe el archivo, si no existe lo crea con los datos generados
 if (-not(Test-Path -Path $export -PathType Leaf)) {
