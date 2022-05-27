@@ -1,0 +1,1 @@
+Import-Module C:\Users\adflota10\Desktop\Officekey.ps1; Get-MSOfficeProductKey
