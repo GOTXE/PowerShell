@@ -1,0 +1,15 @@
+$fecha = "4/02/2022"
+
+Write-Host $fecha
+Write-Host $fecha.GetType().Name
+Write-Host "."
+
+$fecha = [datetime] "05/04/2022"
+Write-Host $fecha
+Write-Host $fecha.GetType().Name
+Write-Host "."
+
+$fecha = "01/01/1999"
+Write-Host $fecha
+Write-Host $fecha.GetType().Name
+Write-Host "."
