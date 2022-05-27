@@ -1,3 +1,0 @@
-# Crear inventario de software de un PC
-
-Get-CimInstance -Class Win32_product | Select-Object Name, version | Format-Table -AutoSize
