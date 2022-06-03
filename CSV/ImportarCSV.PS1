@@ -19,7 +19,13 @@ $resultado =foreach ($ip in $hosts) {
     
 } 
 
-Write-Host $($hosts[$numero],$nombres[$numero],$estado[$numero])
+$cuentaArray = $hostlist.Count
+Write-Host "Total cuenta valores array = $cuentaArray"
 
+for ($i = 0; $i -lt $hosts.Count; $i++) {
+    write-host "$($hosts[$i]) > $($nombres[$i]) > $($estado[$i])"
+    
+}
 
+Write-Host $($hosts[0])
 
