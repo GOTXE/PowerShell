@@ -14,9 +14,9 @@ $nombres += $_.nombre
 
 foreach ($ip in $hosts) {
 
-    Test-Connection -ComputerName $ip -Count 1 -Quiet 
+    $ping = Test-Connection -ComputerName $ip -ErrorAction SilentlyContinue -Count 1 -Quiet 
 
-    if ($ip -eq "True") {
+    if ($ping -eq "True") {
         $estado += "Online"
     } else {
         $estado += "Offline"
