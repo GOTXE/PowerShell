@@ -52,7 +52,7 @@ $computerBIOS = Get-WmiObject Win32_BIOS
 $computerOS = Get-WmiObject Win32_OperatingSystem |select-object -expandproperty caption -First 1
 $computerCPU = Get-WmiObject Win32_Processor
 $computerDiskDrive = Get-WMIObject win32_diskdrive
-$computerNET = Get-WmiObject win32_networkadapterconfiguration -Filter IPEnabled=TRUE | select-object -ExpandProperty macaddress -First 1
+$computerNET = Get-WmiObject win32_networkadapterconfiguration -Filter IPEnabled=TRUE
 $Monitor = Get-WmiObject WmiMonitorID -Namespace root\wmi
 
 
@@ -65,12 +65,13 @@ $csvObject = New-Object PSObject -property @{
 'OS' = $computerOS
 'CPU' = $computerCPU.Name
 'RAM' = "{0:N2}" -f ($computerSystem.TotalPhysicalMemory/1GB)
-'HDD_GB' = '{0:d} GB' -f [int]($computerDiskDrive.Size/1GB)
+#'HDD_GB' = '{0:d} GB' -f [int]($computerDiskDrive.Size/1GB)
 'HDD_MARCA' = $computerDiskDrive.Model
 'HDD_SERIAL' = $computerDiskDrive.SerialNumber
 'NumSerie' = $computerBIOS.SerialNumber
 'BIOS' = $computerBIOS.SMBIOSBIOSVersion
-'Eth' = $computerNET
+'MAC' = $computerNET.macaddress
+'IP' = $computerNET.ipaddress
 'Monitor_Marca' = Decode $Monitor.ManufacturerName -notmatch 0
 'Monitor_Nombre' = Decode $Monitor.UserFriendlyName -notmatch 0
 'Monitor_Serial' = Decode $Monitor.SerialNumberID -notmatch 0
@@ -79,6 +80,6 @@ $csvObject = New-Object PSObject -property @{
 
 # Exporta campos al csv
 
-$csvObject | Select-Object Equipo, Marca, Modelo, OS, CPU, RAM, NumSerie, BIOS, Eth, HDD_GB, HDD_MARCA, HDD_SERIAL, Monitor_Marca, Monitor_Nombre, Monitor_Serial | Export-Csv $export -NoTypeInformation -Append
+$csvObject | Select-Object Equipo, Marca, Modelo, OS, CPU, RAM, NumSerie, BIOS, MAC, IP, HDD_GB, HDD_MARCA, HDD_SERIAL, Monitor_Marca, Monitor_Nombre, Monitor_Serial | Export-Csv $export -NoTypeInformation -Append
 
 # Fin
