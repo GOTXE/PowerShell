@@ -151,4 +151,14 @@ $result | format-table -AutoSize | Out-File $export -Append utf8
 
 Add-Content $export "`n$tituloSW"
 
-Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* |  Select-Object DisplayName, DisplayVersion, Publisher, InstallDate | Format-Table -AutoSize | Out-File $export -Append utf8
+function Get-InstalledApps
+{
+   $regpath = @(
+            'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*'
+            'HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*'
+        )
+     Get-ItemProperty $regpath | .{process{if($_.DisplayName -and $_.UninstallString) { $_ } }} | Select-Object DisplayName, Publisher, DisplayVersion |Sort-Object DisplayName
+}
+
+
+Get-InstalledApps | Out-File -Append $export -Encoding utf8
