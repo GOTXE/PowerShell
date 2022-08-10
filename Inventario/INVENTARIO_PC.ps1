@@ -160,5 +160,4 @@ function Get-InstalledApps
      Get-ItemProperty $regpath | .{process{if($_.DisplayName -and $_.UninstallString) { $_ } }} | Select-Object DisplayName, Publisher, DisplayVersion |Sort-Object DisplayName
 }
 
-
 Get-InstalledApps | Out-File -Append $export -Encoding utf8
