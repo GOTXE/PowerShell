@@ -36,7 +36,7 @@ $extXcl = ".xlsx"
 $extCsv = ".csv"
 
 # INTRODUCIR RUTA DONDE GUARDAR EL ARCHIVO
-$path = 'C:\Users\adflota10\Documents\test\'
+$path = 'Path\'
 
 # Lugar donde se guarda el archivo con nombre del equipo
 $nombreArchivo = 'TU_'+$nombreSistema+'.txt' # CAMBIAR 'TU_' por las siglas que quieras para identificar PC's diferentes
@@ -99,12 +99,17 @@ $csvObject = New-Object PSObject -property @{
 'CPU' = $computerCPU.Name
 'RAM' = "{0:N2}" -f ($computerSystem.TotalPhysicalMemory/1GB)
 'NumSerie' = $computerBIOS.SerialNumber
-'BIOS' = $computerBIOS.SMBIOSBIOSVersion
 'MAC' = $computerNET.macadress
 'IP' = $computerNET.ipaddress
 'Monitor_Marca' = Decode $Monitor.ManufacturerName -notmatch 0
 'Monitor_Nombre' = Decode $Monitor.UserFriendlyName -notmatch 0
 'Monitor_Serial' = Decode $Monitor.SerialNumberID -notmatch 0
+'Product_Type' = $computerInfo.OsProductType
+'Windows_Product_Name' = $computerInfo.WindowsProductName
+'Os_Architecture' = $computerInfo.OsArchitecture
+'OS_Version' = $computerInfo.OsVersion
+'Os_Build' = $computerInfo.OsBuildNumber
+'Bios_Fecha' = $computerInfo.BiosReleaseDate
 
  }
 
@@ -113,7 +118,7 @@ $csvObject = New-Object PSObject -property @{
 # Exporta campos al archivo
 Add-Content $export $tituloEQ
 
-$csvObject |Select-Object Equipo, Marca, Modelo, OS, CPU, RAM, NumSerie, BIOS, MAC, IP, Monitor_Marca, Monitor_Nombre, Monitor_Serial | Out-File -FilePath $export -Append -Encoding ascii -Force
+$csvObject |Select-Object Equipo, Marca, Modelo,Product_Type,Windows_Product_Name, OS,Os_Architecture,OS_Version,Os_Build, CPU, RAM, NumSerie, BIOS,Bios_Fecha, MAC, IP, Monitor_Marca, Monitor_Nombre, Monitor_Serial | Out-File -FilePath $export -Append -Encoding ascii -Force
 
 
 Start-Sleep -Seconds 5
