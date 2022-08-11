@@ -1,0 +1,7 @@
+<# Para que no muestre la primera linea #type system.management.automation.pscustomobject
+hay que usar el comando -NoTypeInformation
+#>
+
+Get-WmiObject -Class win32_service |
+Select Name, DisplayName, State, StartMode, PathName |
+Export-Csv -NoTypeInformation -Path C:/ListOfServices.csv
