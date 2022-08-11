@@ -1,4 +1,4 @@
-﻿#########################################################################################
+#########################################################################################
 #                              INVENTARIO  PC                                           #         
 #########################################################################################
 #                                                                                       #
@@ -6,7 +6,7 @@
 # POR EQUIPO EN FORMATO TXE. ANEXANDO LA INFORMACION RECOGIDA DE CADA PC.               #
 #                                                                                       #
 #########################################################################################
-# TIENES QUE INTRODUCIR LA RUTA DONDE SE GUARDAR¡ EL ARCHIVO                            #
+# TIENES QUE INTRODUCIR LA RUTA DONDE SE GUARDARÁ EL ARCHIVO                            #
 #########################################################################################
 # GUARDAR EL ARCHIVO INVENTARIO_PC.PS1 EN UN DIRECTORIO DONDE TENGAN ACCESO TODOS LOS   #
 # PC DE LOS QUE SE QUIERA HACER INVENTARIO.                                             # 
@@ -33,7 +33,7 @@ $nombreSistema = $computerSystem.name
 $path = 'PATH\'
 
 # Lugar donde se guarda el archivo con nombre del equipo
-$nombreArchivo = 'SRV_'+$nombreSistema+'.txt' # CAMBIAR 'SRV_' por las siglas que quieras para identificar PC's diferentes
+$nombreArchivo = 'TU_'+$nombreSistema+'.txt'
 $export = $path+$nombreArchivo
 
 
@@ -43,26 +43,22 @@ $tituloHW = "INVENTARIO HARDWARE"
 $tituloDD = "DISCOS DUROS"
 $tituloSW = "INVENTARIO SOFTWARE"
 
-# Verifica si existe el archivo, si no existe lo crea
+# Verifica si existe el archivo, si no existe lo crea y ejecuta las acciones para recuperar la información
+
 if (-not(Test-Path -Path $export -PathType Leaf)) {
      try {
          $null = New-Item -ItemType File -Path $export -Force -ErrorAction Stop
-        
-     }
-     catch {
-         throw $_.Exception.Message
-     }
-    }
 
-# Recoger informacion del PC
+         # Recoger informacion del PC
 
 $computerSystem = Get-WmiObject Win32_ComputerSystem
 $computerBIOS = Get-WmiObject Win32_BIOS
 $computerOS = Get-WmiObject Win32_OperatingSystem |select-object -expandproperty caption -First 1
 $computerCPU = Get-WmiObject Win32_Processor
 $computerDiskDrive = Get-WMIObject win32_diskdrive
-$computerNET = Get-WmiObject win32_networkadapterconfiguration -Filter IPEnabled=TRUE 
+$computerNET = Get-WmiObject win32_networkadapterconfiguration -Filter IPEnabled=TRUE
 $Monitor = Get-WmiObject WmiMonitorID -Namespace root\wmi
+$computerInfo = Get-ComputerInfo
 
 
 # Crea ARCHIVO con los datos recogidos
@@ -76,11 +72,17 @@ $csvObject = New-Object PSObject -property @{
 'RAM' = "{0:N2}" -f ($computerSystem.TotalPhysicalMemory/1GB)
 'NumSerie' = $computerBIOS.SerialNumber
 'BIOS' = $computerBIOS.SMBIOSBIOSVersion
-'MAC' = $computerNET.macadress
-'IP' = $computerNET.ipaddress
+'MAC' = $computerNET.MACAddress
+'IP' = $computerNET.IPAddress
 'Monitor_Marca' = Decode $Monitor.ManufacturerName -notmatch 0
 'Monitor_Nombre' = Decode $Monitor.UserFriendlyName -notmatch 0
 'Monitor_Serial' = Decode $Monitor.SerialNumberID -notmatch 0
+'Product_Type' = $computerInfo.OsProductType
+'Windows_Product_Name' = $computerInfo.WindowsProductName
+'Os_Architecture' = $computerInfo.OsArchitecture
+'OS_Version' = $computerInfo.OsVersion
+'Os_Build' = $computerInfo.OsBuildNumber
+'Bios_Fecha' = $computerInfo.BiosReleaseDate
 
  }
 
@@ -89,7 +91,7 @@ $csvObject = New-Object PSObject -property @{
 # Exporta campos al archivo
 Add-Content $export $tituloEQ
 
-$csvObject |Select-Object Equipo, Marca, Modelo, OS, CPU, RAM, NumSerie, BIOS, MAC, IP, Monitor_Marca, Monitor_Nombre, Monitor_Serial | format-List  | Out-File $export -Append utf8
+$csvObject |Select-Object Equipo, Marca, Modelo,Product_Type,Windows_Product_Name, OS,Os_Architecture,OS_Version,Os_Build, CPU, RAM, NumSerie, BIOS,Bios_Fecha, MAC, IP, Monitor_Marca, Monitor_Nombre, Monitor_Serial | format-List  | Out-File $export -Append utf8
 
 ######################################################
 # SCRIPT PARA CONSULTAR DATOS DE VARIOS DISCOS DUROS #
@@ -151,15 +153,16 @@ $result | format-table -AutoSize | Out-File $export -Append utf8
 
 Add-Content $export "`n$tituloSW"
 
-function Get-InstalledApps
-{
-   $regpath = @(
-            'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*'
-            'HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*'
-        )
-     Get-ItemProperty $regpath | .{process{if($_.DisplayName -and $_.UninstallString) { $_ } }} | Select-Object DisplayName, Publisher, DisplayVersion |Sort-Object DisplayName
-}
+# Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* |  Select-Object DisplayName, DisplayVersion, Publisher, InstallDate | Format-Table -AutoSize | Out-File $export -Append utf8
 
-# Get-InstalledApps | Out-File -Append $export -Encoding utf8
+Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* |  Select-Object DisplayName, DisplayVersion, Publisher, InstallDate | Format-list | Out-File $export -Append utf8
 
-Get-InstalledApps | add-content -path $export -Encoding utf8
+        
+     }
+     catch {
+         throw $_.Exception.Message
+     }
+    }
+
+
+

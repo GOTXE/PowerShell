@@ -1,4 +1,4 @@
-﻿#########################################################################################
+#########################################################################################
 #                              INVENTARIO  PC                                           #         
 #########################################################################################
 #                                                                                       #
@@ -13,6 +13,8 @@
 #########################################################################################
 
 
+
+
 # Funcion para traducir valores
 function Decode {
     If ($args[0] -is [System.Array]) {
@@ -23,6 +25,7 @@ function Decode {
     }
 }
 
+
 # Introducir ruta y nombre donde guardar el archivo
 
 # Nombre del equipo
@@ -30,12 +33,15 @@ $computerSystem = Get-WmiObject Win32_ComputerSystem
 $nombreSistema = $computerSystem.name
 
 # INTRODUCIR RUTA DONDE GUARDAR EL ARCHIVO
-$path = 'PATH\'
+$path = '\Path'
 
 # Lugar donde se guarda el archivo con nombre del equipo
-$nombreArchivo = 'SRV_'+$nombreSistema+'.txt' # CAMBIAR 'SRV_' por las siglas que quieras para identificar PC's diferentes
+$nombreArchivo = 'TU_'+$nombreSistema+'.txt' # CAMBIAR 'TU_' por las siglas que quieras para identificar PC's diferentes
 $export = $path+$nombreArchivo
 
+# Nombre archivo software 
+$archivoSW = 'TU_'+$nombreSistema+'_SW.csv'
+$exportSW = $path+$archivoSW
 
 # TITULOS
 $tituloEQ = 'EQUIPO: ' + $nombreSistema
@@ -54,6 +60,16 @@ if (-not(Test-Path -Path $export -PathType Leaf)) {
      }
     }
 
+if (-not(Test-Path -Path $exportSW -PathType Leaf)) {
+     try {
+         $null = New-Item -ItemType File -Path $exportSW -Force -ErrorAction Stop
+        
+     }
+     catch {
+         throw $_.Exception.Message
+     }
+    }
+
 # Recoger informacion del PC
 
 $computerSystem = Get-WmiObject Win32_ComputerSystem
@@ -63,6 +79,7 @@ $computerCPU = Get-WmiObject Win32_Processor
 $computerDiskDrive = Get-WMIObject win32_diskdrive
 $computerNET = Get-WmiObject win32_networkadapterconfiguration -Filter IPEnabled=TRUE 
 $Monitor = Get-WmiObject WmiMonitorID -Namespace root\wmi
+
 
 
 # Crea ARCHIVO con los datos recogidos
@@ -89,7 +106,11 @@ $csvObject = New-Object PSObject -property @{
 # Exporta campos al archivo
 Add-Content $export $tituloEQ
 
-$csvObject |Select-Object Equipo, Marca, Modelo, OS, CPU, RAM, NumSerie, BIOS, MAC, IP, Monitor_Marca, Monitor_Nombre, Monitor_Serial | format-List  | Out-File $export -Append utf8
+$csvObject |Select-Object Equipo, Marca, Modelo, OS, CPU, RAM, NumSerie, BIOS, MAC, IP, Monitor_Marca, Monitor_Nombre, Monitor_Serial | Out-File -FilePath $export -Append -Encoding ascii -Force
+
+
+Start-Sleep -Seconds 5
+
 
 ######################################################
 # SCRIPT PARA CONSULTAR DATOS DE VARIOS DISCOS DUROS #
@@ -127,6 +148,8 @@ $info_diskdrive_basic = Get-WmiObject Win32_DiskDrive | ForEach-Object {
     }
 }
 
+Start-Sleep -Seconds 5
+
 # sort the returned array of objects on the DriveLetter property and loop through
 $result = $info_diskdrive_basic | Sort-Object DriveLetter | ForEach-Object {
     # loop through all the properties and calculate the padding needed for the output
@@ -142,14 +165,14 @@ $result = $info_diskdrive_basic | Sort-Object DriveLetter | ForEach-Object {
 
 
 # Escribir datos en disco
-$result | format-table -AutoSize | Out-File $export -Append utf8
+$result | format-table -AutoSize | Out-File -FilePath $export -Append -Encoding ascii -Force
 
 
 #######################
 # INVENTARIO SOFTWARE #
 #######################
 
-Add-Content $export "`n$tituloSW"
+Start-Sleep -Seconds 5
 
 function Get-InstalledApps
 {
@@ -157,9 +180,38 @@ function Get-InstalledApps
             'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*'
             'HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*'
         )
-     Get-ItemProperty $regpath | .{process{if($_.DisplayName -and $_.UninstallString) { $_ } }} | Select-Object DisplayName, Publisher, DisplayVersion |Sort-Object DisplayName
+     Get-ItemProperty $regpath | .{process{if($_.DisplayName -and $_.UninstallString) { $_ } }} | Select DisplayName, Publisher, DisplayVersion |Sort Publisher
 }
 
-# Get-InstalledApps | Out-File -Append $export -Encoding utf8
+Get-InstalledApps | Export-Csv -NoTypeInformation -Path $exportSW -Append -Force
 
-Get-InstalledApps | add-content -path $export -Encoding utf8
+
+# Exportar csv a excel formateado
+# Definir archivo y delimitador
+
+$csv = $exportSW
+$xlsx = $path+$nombreSistema+'.xlsx'
+$delimiter = ","
+
+# Crear excel nuevo con hoja vacía
+$excel = new-object -ComObject excel.application
+$workbook = $excel.workbooks.add(1)
+$worksheet = $workbook.worksheets.item(1)
+
+# Construir las tablas de query y reformaterar datos
+$TxtConnector = ("TEXT;" + $csv)
+$Connector = $worksheet.QueryTables.add($TxtConnector,$worksheet.Range("A1"))
+$query = $worksheet.QueryTables.item($Connector.name)
+$query.TextFileOtherDelimiter = $delimiter
+$query.TextFileParseType = 1
+$query.TextFileColumnDataTypes = ,1 * $worksheet.Cells.Columns.Count
+$query.AdjustColumnWidth = 1
+
+# Ejecutar y eliminarl la pregunta de importaicion
+$query.Refresh()
+$query.Delete()
+
+# Guardar y salir del libro de XLSX
+$Workbook.SaveAs($xlsx,51)
+$excel.Quit()
+
