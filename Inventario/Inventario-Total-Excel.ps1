@@ -200,6 +200,7 @@ Get-InstalledApps | Export-Csv -NoTypeInformation -Path $exportSW -Append -Force
 Start-Sleep -Seconds 5
 
 
+
 # Exportar csv a excel formateado
 # Definir delimitador
 $delimiter = ","
@@ -228,5 +229,4 @@ $excel.Quit()
 
 # Eliminar archivo csv
 Remove-Item -Path $exportSW -Force
-
 
