@@ -52,9 +52,9 @@ $xlsx = $path+'TU_'+$nombreSistema+'_SW'+$extXcl
 
 # TITULOS
 $tituloEQ = 'EQUIPO: ' + $nombreSistema
-$tituloHW = "INVENTARIO HARDWARE"
+#$tituloHW = "INVENTARIO HARDWARE"
 $tituloDD = "DISCOS DUROS"
-$tituloSW = "INVENTARIO SOFTWARE"
+#$tituloSW = "INVENTARIO SOFTWARE"
 
 # Verifica si existe el archivo, si no existe lo crea
 if (-not(Test-Path -Path $export -PathType Leaf)) {
@@ -83,7 +83,7 @@ $computerSystem = Get-WmiObject Win32_ComputerSystem
 $computerBIOS = Get-WmiObject Win32_BIOS
 $computerOS = Get-WmiObject Win32_OperatingSystem |select-object -expandproperty caption -First 1
 $computerCPU = Get-WmiObject Win32_Processor
-$computerDiskDrive = Get-WMIObject win32_diskdrive
+#$computerDiskDrive = Get-WMIObject win32_diskdrive
 $computerNET = Get-WmiObject win32_networkadapterconfiguration -Filter IPEnabled=TRUE 
 $Monitor = Get-WmiObject WmiMonitorID -Namespace root\wmi
 
@@ -224,6 +224,7 @@ $query.Refresh()
 $query.Delete()
 
 # Guardar y salir del libro de XLSX
+$worksheet.Name =$nombreSistema
 $Workbook.SaveAs($xlsx,51)
 $excel.Quit()
 
