@@ -23,7 +23,7 @@ $gruposSystem+= (Get-LocalGroup).Name
 
 # Compara grupos sistema con grupos csv
 
-foreach($group in $grupos){
+foreach($group in $gruposUnicos){
     if (!($group -in $gruposSystem)){
         Write-Host 'El grupo ' $group ' NO EXISTE'
     }
