@@ -1,5 +1,5 @@
-
-$csv = Import-Csv -Path 'PATH.csv' -Delimiter ';' |sort group1,group2
+# Importar campos del csv
+$csv = Import-Csv -Path 'PATH.csv' -Delimiter ';' |Sort-Object "Grupo1,Grupo2"
 
 # Crear array para los grupos
 $grupos = @()
@@ -11,21 +11,17 @@ $grupos+=$csv.Grupo2
 # Filtrar los elementos vacíos del array (csv)
 $grupos.Where({ $_ -ne ""})
 
-# Filtrar elementos únicos
-$gruposUnicos = $grupos | sort -Unique
-$gruposUnicos
+# Filtrar elementos únicos, elimina repeticiones
+$gruposUnicos = $grupos | Sort-Object -Unique
 
-
-# Grupos del sistema
-$gruposSystem = @()
-$gruposSystem+= (Get-LocalGroup).Name
-
+# Importa los Grupos del sistema a un array
+$gruposSystema = @()
+$gruposSystema+= (Get-LocalGroup).Name
 
 # Compara grupos sistema con grupos csv
-
-foreach($group in $gruposUnicos){
-    if (!($group -in $gruposSystem)){
-        Write-Host 'El grupo ' $group ' NO EXISTE'
+foreach($grupo in $gruposUnicos){
+    if (!($grupo -in $gruposSystema)){
+        Write-Host 'El grupo ' $grupo ' NO EXISTE'
     }
 
 }
