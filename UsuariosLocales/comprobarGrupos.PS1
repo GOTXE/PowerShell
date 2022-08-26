@@ -1,5 +1,5 @@
 
-$csv = Import-Csv -Path 'C:\Users\diego\Documents\usuarios.csv' -Delimiter ';' |sort group1,group2
+$csv = Import-Csv -Path 'PATH.csv' -Delimiter ';' |sort group1,group2
 
 # Crear array para los grupos
 $grupos = @()
