@@ -1,4 +1,4 @@
-$csv = Import-Csv -Path 'C:\Users\diego\Documents\usuarios.csv' -Delimiter ';'
+$csv = Import-Csv -Path 'PATH.csv' -Delimiter ';'
 
 $users = foreach($user in $csv){
 
