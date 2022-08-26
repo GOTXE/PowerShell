@@ -1,13 +1,12 @@
-$usersCsv = import-csv -Path "PATH.csv" -Delimiter ";" | format-table
+$usersCsv = import-csv -Path "PATH.csv" -Delimiter ";"
 
 foreach($user in $usersCsv){
     
-    $empleo = $user.Empleo
-    $nombre = $user.Nombre
-    $apellido1 = $user.Apellido1
-    $apellido2 = $user.Apellido2
+    $NombreCompleto = $user.Empleo, $user.Nombre, $user.Apellido1, $user.Apellido2
     $Nusuario = $user.Nusuario
-    $passwd = $user.Passwd
+    $passwd = $user.Passwd 
+     ## añadir cifrado contraseña
+    $descripcion = $user.Descripcion
     $MiembroDe1 = $user.Miembrode1
     $MiembroDe2 = $user.Miermbrode2
     $MiembroDe3 = $user.Miembrode3
