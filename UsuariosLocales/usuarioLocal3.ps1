@@ -11,7 +11,7 @@ foreach($user in $usersCsv){
     $MiembroDe2 = $user.Miermbrode2
     $MiembroDe3 = $user.Miembrode3
 
-    
+<#    
     if ($Nusuario -match '_as') {
     
         new-localuser -Name "$nombre" -Password $SecPass -AccountNeverExpires -ErrorAction stop
@@ -34,5 +34,6 @@ foreach($user in $usersCsv){
        
     
     }
-    
+ #>   
+
 }
