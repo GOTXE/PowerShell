@@ -1,0 +1,1 @@
+Get-WinEvent -ListLog * |Sort-Object LogName

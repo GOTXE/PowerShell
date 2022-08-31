@@ -1,0 +1,1 @@
+Get-WinEvent -LogName "security" |Select-Object timecreated, Message
