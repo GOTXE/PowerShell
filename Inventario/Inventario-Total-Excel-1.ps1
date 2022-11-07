@@ -112,7 +112,7 @@ $csvObject = New-Object PSObject -property @{
 
  }
 
-
+#
 
 # Exporta campos al archivo
 Add-Content $export $tituloEQ
