@@ -94,7 +94,11 @@ $csvObject = New-Object PSObject -property @{
 'Equipo' = $computerSystem.Name
 'Marca' = $computerSystem.Manufacturer
 'Modelo' = $computerSystem.Model
+'Windows_Product_Name' = $computerInfo.WindowsProductName
 'OS' = $computerOS
+'Os_Architecture' = ($ComputerInfo ).osarchitecture # Arquitectura So
+'OS_Version' = ($ComputerInfo ).Version # Versión SO
+'Os_Build' = ($ComputerInfo ).BuildNumber # Número de Versión
 'CPU' = $computerCPU.Name
 'RAM' = "{0:N2}" -f ($computerSystem.TotalPhysicalMemory/1GB)
 'NumSerie' = $computerBIOS.SerialNumber
@@ -105,11 +109,6 @@ $csvObject = New-Object PSObject -property @{
 'Monitor_Marca' = Decode $Monitor.ManufacturerName -notmatch 0
 'Monitor_Nombre' = Decode $Monitor.UserFriendlyName -notmatch 0
 'Monitor_Serial' = Decode $Monitor.SerialNumberID -notmatch 0
-'Product_Type' = $computerInfo.OsProductType
-'Windows_Product_Name' = $computerInfo.WindowsProductName
-'Os_Architecture' = ($ComputerInfo ).osarchitecture # Arquitectura So
-'OS_Version' = ($ComputerInfo ).Version # Versión SO
-'Os_Build' = ($ComputerInfo ).BuildNumber # Número de Versión
 
  }
 
@@ -118,7 +117,7 @@ $csvObject = New-Object PSObject -property @{
 # Exporta campos al archivo
 Add-Content $export $tituloEQ
 
-$csvObject |Select-Object Equipo, Marca, Modelo,Product_Type,Windows_Product_Name, OS,Os_Architecture,OS_Version,Os_Build, CPU, RAM, NumSerie, BIOS,Bios_Fecha, MAC, IP, Monitor_Marca, Monitor_Nombre, Monitor_Serial | Out-File -FilePath $export -Append -Encoding ascii -Force
+$csvObject |Select-Object Equipo, Marca, Modelo, OS,Os_Architecture,OS_Version,Os_Build, CPU, RAM, NumSerie, BIOS,Bios_Fecha, MAC, IP, Monitor_Marca, Monitor_Nombre, Monitor_Serial | Out-File -FilePath $export -Append -Encoding ascii -Force
 
 
 Start-Sleep -Seconds 5
