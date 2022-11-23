@@ -1,8 +1,5 @@
 # Script para sacar el Serial de windows y añadirlo a un archivo con el número de serie y la versión de windows
 
-#Establecer el nivel de ejecucion
-Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
-
 #Buscar el Pen Drive y extraer la letra donde se guardarán los datos
 $UsbDrive = Get-WmiObject Win32_Volume -Filter 'DriveType=2' |Select-Object -ExpandProperty driveletter
 
