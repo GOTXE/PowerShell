@@ -51,7 +51,7 @@ $xlsx = $path+'TU_'+$nombreSistema+'_SW'+$extXcl
 
 # TITULOS
 $tituloEQ = 'EQUIPO: ' + $nombreSistema
-#$tituloHW = "INVENTARIO HARDWARE"
+$tituloHW = "INVENTARIO HARDWARE"
 $tituloDD = "DISCOS DUROS"
 #$tituloSW = "INVENTARIO SOFTWARE"
 
@@ -112,12 +112,11 @@ $csvObject = New-Object PSObject -property @{
 
  }
 
-#
 
 # Exporta campos al archivo
-Add-Content $export $tituloEQ
+Add-Content $export "$tituloEQ  `n" $tituloHW
 
-$csvObject |Select-Object Equipo, Marca, Modelo, OS,Os_Architecture,OS_Version,Os_Build, CPU, RAM, NumSerie, BIOS,Bios_Fecha, MAC, IP, Monitor_Marca, Monitor_Nombre, Monitor_Serial | Out-File -FilePath $export -Append -Encoding ascii -Force
+$csvObject | Select-Object Equipo, Marca, Modelo, Windows_Product_Name, OS,Os_Architecture,OS_Version,Os_Build, CPU, RAM, NumSerie, BIOS,Bios_Fecha, MAC, IP, Monitor_Marca, Monitor_Nombre, Monitor_Serial | Out-File -FilePath $export -Append -Encoding ascii -Force
 
 
 Start-Sleep -Seconds 5
