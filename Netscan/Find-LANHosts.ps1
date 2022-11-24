@@ -1,3 +1,5 @@
+# Sacado de https://github.com/mdjx/PSLANScan
+
 <#
     .SYNOPSIS
     Quickly finds host on a local network using ARP for discovery
