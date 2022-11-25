@@ -1,4 +1,4 @@
-# Script para buscar de forma rápida si está instalado el HOTFIX que se especifique 
+# Script para buscar de forma rápida si está instalado el HOTFIX que se especifique o buscar todos los hotfix
 
 function showmenu {
 
