@@ -1,4 +1,4 @@
-$path = "C:\Users\GTX\Desktop\PS_BatchRename\Olaya\Evaluación\Diego Caro Soto"
+$path = "PATH"
 
 
 Get-ChildItem -path $path| where {$_.Name -match 'UF+ '} | ForEach-Object{
