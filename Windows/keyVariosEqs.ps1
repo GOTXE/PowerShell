@@ -18,7 +18,7 @@ if(-not(test-path -path $path -pathtype Leaf) ) {
 
 # Crear un objeto con los datos a añadir al archivo
 $objeto = New-Object PSObject -Property @{
-'OSVersion' = (ComputerInfo).OsVersion
+'OSVersion' = (Get-ComputerInfo).OsVersion
 'Equipo Serial' =  (Get-WmiObject Win32_BIOS).SerialNumber 
 'Windows Key' = (Get-WmiObject -query ‘select * from SoftwareLicensingService’).OA3xOriginalProductKey
 }

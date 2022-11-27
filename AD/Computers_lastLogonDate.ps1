@@ -2,4 +2,4 @@
 
 $lastLogonDate = (get-date).AddYears(-1)
 
-Get-ADComputers -properties lastlogondate,lastlogontimestamp -Filter {LastlogonTimeStamp -lt $lastLogonDate} -SearchBase 'DC=...;DC=...' | Sort LastLogonTimeStamp | Select-Object Name,@{N='lastlogontimestamp};E={[DateTime]::FromFileTime($_.lastlogontimestamp)}}, lastlogondate,DistinguishedName | Out-File ".......txt"
+Get-ADComputers -properties lastlogondate,lastlogontimestamp -Filter {LastlogonTimeStamp -lt $lastLogonDate} -SearchBase 'DC=...;DC=...' | Sort LastLogonTimeStamp | Select-Object Name,@{N='lastlogontimestamp};E={[DateTime]::FromFileTime($_.lastlogontimestamp)}}, lastlogondate,DistinguishedName | Out-File "PATH.txt"
