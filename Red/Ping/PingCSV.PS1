@@ -7,9 +7,9 @@ $hosts = @()
 $nombres = @()
 $estado =@()
 $hostlist | ForEach-Object {
-$hosts += $_.host
-$nombres += $_.nombre
-}
+    $hosts += $_.host
+    $nombres += $_.nombre
+    }
 
 
 foreach ($ip in $hosts) {
