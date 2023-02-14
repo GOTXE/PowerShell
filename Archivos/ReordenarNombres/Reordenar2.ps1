@@ -46,3 +46,37 @@ Get-ChildItem -path $path| where {$_.Name -notmatch "\w\d{4}\w??\s-"} | ForEach-
 
 }
 
+Get-ChildItem -path $path| where {$_.Name -notmatch 'E\d -'} | ForEach-Object{
+   
+     
+    Rename-Item -Path $_.FullName -NewName ( $_.Name -replace '(E\d{1}) -(\d{1})', '$1-$2') -ErrorAction SilentlyContinue # Elimina el \s entre E\d -\d
+    Rename-Item -Path $_.FullName -NewName ( $_.Name -replace '(E\d{1})- (\d{1})', '$1-$2') -ErrorAction SilentlyContinue # Elimina el \s entre E\d- \d
+
+}
+
+
+
+<#
+
+Get-ChildItem -path $path| where {$_.Name -notmatch '^UF\d{4}\w??\s-\sE\d'} | ForEach-Object{
+   
+     
+    Rename-Item -Path $_.FullName -NewName ( $_.Name -replace '(E\d{1}) -(\d{1})', '$1-$2') -ErrorAction SilentlyContinue # Elimina el \s entre E\d -\d
+}
+
+#>
+
+
+
+Get-ChildItem -Path $path |Where-Object {$_.Name -notmatch '^UF\d{4}\w??\s-\sE\d'} | ForEach-Object {
+
+Rename-Item -Path $_.FullName -NewName ( $_.Name -replace '^(UF\d{4}\w??) - (.*?) (E\d{1}-\d{1})', '$1 - $3 - $2' ) -ErrorAction SilentlyContinue # trae adelante EX-X
+
+}
+
+
+Get-ChildItem -Path $path |Where-Object {$_.Name -notmatch '^UF\d{4}\w??\s-\sE\d'} | ForEach-Object {
+
+ Rename-Item -Path $_.FullName -NewName ( $_.Name -replace '^(UF\d{4}\w??) - (.*?) (E\d{1}\s??-??\d??)', '$1 - $3 - $2' ) # Mueve el valor E\d a su lugar
+
+}
